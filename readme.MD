@@ -1,6 +1,7 @@
 # ⭐ Lucian Iernye - React Test Tech
 
 A basic full-stack aplication created with React, Node, Express and MongoDB.
+Because of time limit I didn't finished the pagination, filtering and sorting yet...
 
 ## Instructions
 
