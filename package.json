@@ -1,0 +1,27 @@
+{
+  "name": "react-tech-test",
+  "version": "1.0.0",
+  "description": "Full Stack application using React, Node, Express and MongoDB",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client-install": "npm install --prefix front-end",
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "front-end": "npm start --prefix front-end",
+    "devStart": "concurrently \"npm run server\" \"npm run front-end\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix front-end && npm run build --prefix front-end"
+  },
+  "keywords": [],
+  "author": "Lucian Iernye",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.24"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
