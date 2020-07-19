@@ -17,6 +17,7 @@ class CreateTyre extends Component {
     this.onChangeRim = this.onChangeRim.bind(this);
     this.onChangeSpeed = this.onChangeSpeed.bind(this);
     this.onChangeDate = this.onChangeDate.bind(this);
+    this.onChangeImgUrl = this.onChangeImgUrl.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
@@ -29,6 +30,7 @@ class CreateTyre extends Component {
       rim: 0,
       speed: "",
       date: new Date(),
+      imgUrl: "",
       brands: [],
     };
   }
@@ -98,6 +100,12 @@ class CreateTyre extends Component {
     });
   }
 
+  onChangeImgUrl(e) {
+    this.setState({
+      imgUrl: e.target.value,
+    });
+  }
+
   onSubmit(e) {
     e.preventDefault();
 
@@ -111,6 +119,7 @@ class CreateTyre extends Component {
       rim: this.state.rim,
       speed: this.state.speed,
       date: this.state.date,
+      imgUrl: this.state.imgUrl,
     };
 
     console.log(tyre);
@@ -212,6 +221,16 @@ class CreateTyre extends Component {
                 className="form-control"
                 value={this.state.speed}
                 onChange={this.onChangeSpeed}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="speed">Image URL:</label>
+              <input
+                type="text"
+                required
+                className="form-control"
+                value={this.state.imgUrl}
+                onChange={this.onChangeImgUrl}
               />
             </div>
             <div className="form-group">

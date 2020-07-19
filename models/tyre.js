@@ -42,6 +42,10 @@ const tyreSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  imgUrl: {
+    type: String,
+    required: true,
+  },
   // coverImage: {
   //   type: Buffer,
   //   required: true,

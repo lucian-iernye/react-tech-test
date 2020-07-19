@@ -1,47 +1,106 @@
 import React, { Component } from "react";
+import styles from "./TyresList.module.scss";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import {
+  Card,
+  CardImg,
+  CardBody,
+  CardTitle,
+  CardSubtitle,
+  CardText,
+} from "reactstrap";
+import { Button } from "reactstrap";
+import SearchBar from "../SearchBar/SearchBar";
 
-const Tyre = (props) => (
-  <tr>
-    <td>{props.tyre.name}</td>
-    <td>{props.tyre.type}</td>
-    <td>{props.tyre.brand}</td>
-    <td>{props.tyre.description}</td>
-    <td>{props.tyre.width}</td>
-    <td>{props.tyre.profile}</td>
-    <td>{props.tyre.rim}</td>
-    <td>{props.tyre.speed}</td>
-    <td>{props.tyre.date.substring(0, 10)}</td>
-    <td>
-      <Link to={"/edit/" + props.tyre._id}>Edit</Link> |{" "}
-      <Link
-        to="/"
-        onClick={() => {
-          props.deleteTyre(props.tyre._id);
-        }}
-      >
-        Delete
-      </Link>
-    </td>
-  </tr>
-);
+const Tyre = (props) => {
+  return (
+    <div className={styles.result}>
+      <Card className="text-center" style={{ width: "20rem" }}>
+        <CardImg
+          top
+          src={props.tyre.imgUrl}
+          alt="..."
+          style={{ width: "12rem", margin: "5px auto" }}
+        />
+        <CardBody>
+          <CardTitle>{props.tyre.name}</CardTitle>
+          <CardSubtitle className="mb-2 text-muted">
+            {props.tyre.brand}
+          </CardSubtitle>
+          <CardText>{props.tyre.description}</CardText>
+          <div className={styles.buttons}>
+            <Button
+              className={styles.button}
+              href={"/edit/" + props.tyre._id}
+              color="primary"
+            >
+              Edit
+            </Button>
+            <Button
+              className={styles.button}
+              href={"/edit/" + props.tyre._id}
+              color="primary"
+            >
+              View
+            </Button>
+            <Button
+              className={styles.button}
+              href="/"
+              color="danger"
+              onClick={() => {
+                props.deleteTyre(props.tyre._id);
+              }}
+            >
+              Delete
+            </Button>
+          </div>
+        </CardBody>
+      </Card>
+    </div>
+  );
+};
 
 export default class TyresList extends Component {
   constructor(props) {
     super(props);
 
     this.deleteTyre = this.deleteTyre.bind(this);
+    this.onChangeSearch = this.onChangeSearch.bind(this);
 
-    this.state = { tyres: [] };
+    this.state = {
+      loading: false,
+      message: "",
+      search: "",
+      tyres: [],
+    };
+  }
+
+  onChangeSearch(e) {
+    e.preventDefault();
+
+    this.setState({ search: e.target.value });
+    this.setState({ loading: true });
+
+    axios
+      .get(`/tyres?brand={this.state.search}`)
+      .then((response) => {
+        this.setState({ tyres: response.data });
+      })
+      .then(this.setState({ loading: false }))
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   componentDidMount() {
+    this.setState({ loading: true });
     axios
       .get("/tyres/")
       .then((response) => {
         this.setState({ tyres: response.data });
       })
+      .then(this.setState({ loading: false }))
       .catch((error) => {
         console.log(error);
       });
@@ -57,40 +116,37 @@ export default class TyresList extends Component {
     });
   }
 
-  tyreList() {
-    return this.state.tyres.map((currenttyre) => {
-      return (
-        <Tyre
-          tyre={currenttyre}
-          deleteTyre={this.deleteTyre}
-          key={currenttyre._id}
-        />
-      );
-    });
-  }
+  handleOnInputChange = (event) => {
+    const query = event.target.value;
+  };
 
   render() {
+    if (this.state.loading) {
+      return <p>Loading...</p>;
+    }
+
+    const filteredTyres = this.state.tyres.filter((tyre) => {
+      return tyre.brand.toLowerCase().includes(this.state.search.toLowerCase());
+    });
+
     return (
-      <div>
+      <section>
         <h3>Tyres from the database</h3>
-        <table className="table">
-          <thead className="thead-light">
-            <tr>
-              <th>Brand</th>
-              <th>Name</th>
-              <th>Type</th>
-              <th>Description</th>
-              <th>Width</th>
-              <th>Profile</th>
-              <th>Rim</th>
-              <th>Speed</th>
-              <th>Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>{this.tyreList()}</tbody>
-        </table>
-      </div>
+
+        <SearchBar onChangeSearch={this.onChangeSearch} />
+
+        <div className={styles.results}>
+          {filteredTyres.map((currenttyre) => {
+            return (
+              <Tyre
+                tyre={currenttyre}
+                deleteTyre={this.deleteTyre}
+                key={currenttyre._id}
+              />
+            );
+          })}
+        </div>
+      </section>
     );
   }
 }

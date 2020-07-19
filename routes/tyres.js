@@ -17,6 +17,7 @@ router.route("/add").post((req, res) => {
   const rim = Number(req.body.rim);
   const speed = req.body.speed;
   const date = Date.parse(req.body.date);
+  const imgUrl = req.body.imgUrl;
 
   const newTyre = new Tyre({
     name,
@@ -28,6 +29,7 @@ router.route("/add").post((req, res) => {
     rim,
     speed,
     date,
+    imgUrl,
   });
 
   newTyre
@@ -63,6 +65,7 @@ router.route("/update/:id").post((req, res) => {
       tyre.rim = Number(req.body.rim);
       tyre.speed = req.body.speed;
       tyre.date = Date.parse(req.body.date);
+      tyre.imgUrl = req.body.imgUrl;
 
       tyre
         .save()

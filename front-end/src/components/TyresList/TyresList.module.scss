@@ -1,0 +1,28 @@
+$first-color: #1c1c31;
+$second-color: #96ce04;
+$third-color: white;
+
+.results {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 20px 0px;
+}
+
+.result {
+  margin-top: 10px;
+  min-width: 300px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.03);
+    transition: 0.4s ease-out;
+    border: 1px solid $second-color;
+  }
+}
+
+.button {
+  margin: 10px;
+}
